@@ -7,14 +7,11 @@ b = gets.chomp.to_f
 print 'Введите 3 сторону треугольника: '
 c = gets.chomp.to_f
 
-triangle = [a, b, c].sort
-a = triangle[0]
-b = triangle[1]
-h = triangle[2] # гипотенуза
+(a,b,h) = [a, b, c].sort
 
 result = 'Треугольник: '
 
-if h**2 == (a**2 + b**2)
+if h ** 2 == (a ** 2 + b ** 2)
   result << 'прямоугольный'
 else
   result << 'не прямоугольный'
