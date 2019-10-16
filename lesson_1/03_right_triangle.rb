@@ -7,7 +7,7 @@ b = gets.chomp.to_f
 print 'Введите 3 сторону треугольника: '
 c = gets.chomp.to_f
 
-(a,b,h) = [a, b, c].sort
+a, b, h = [a, b, c].sort
 
 result = 'Треугольник: '
 
