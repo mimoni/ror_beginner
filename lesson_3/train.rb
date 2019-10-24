@@ -1,5 +1,7 @@
 class Train
-  attr_reader :speed, :amount_train_carriage
+  attr_reader :speed
+  attr_reader :current_station
+  attr_reader :amount_train_carriage
 
   def initialize(number, type, amount_train_carriage = 0)
     @number = number
@@ -9,7 +11,8 @@ class Train
   end
 
   def increase_speed(speed)
-    @speed += speed
+    new_speed = @speed + speed
+    @speed = new_speed if new_speed.positive?
   end
 
   def stop
@@ -30,23 +33,19 @@ class Train
   end
 
   def move_forward
-    @index_current_station = next_station if @route.stations.size - 1 > get_index_station
+    @index_current_station = next_station unless @route.stations.last == @current_station
   end
 
   def move_backward
-    @index_current_station = previous_station unless get_index_station.zero?
+    @index_current_station = previous_station unless @route.stations.first == @current_station
   end
 
   def previous_station
-    @route.stations.index[get_index_station - 1]
-  end
-
-  def current_station
-    @current_station
+    @route.stations[get_index_station - 1]
   end
 
   def next_station
-    @route.stations.index[get_index_station + 1]
+    @route.stations[get_index_station + 1]
   end
 
   def get_index_station

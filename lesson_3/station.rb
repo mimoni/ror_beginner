@@ -15,6 +15,6 @@ class Station
   end
 
   def move_train(train)
-    @trains.delete train
+    @trains.delete(train)
   end
 end
