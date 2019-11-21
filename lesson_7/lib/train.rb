@@ -18,7 +18,7 @@ class Train
   include Validate
   include Manufacturer
   include InstanceCounter
-  attr_reader :speed, :wagons, :number
+  attr_reader :speed, :wagons, :number, :type
 
   NUMBER_FORMAT = /^[0-9a-z]{3}-?[0-9a-z]{2}$/i
   @@trains = {}
@@ -27,10 +27,11 @@ class Train
     @@trains[number]
   end
 
-  def initialize(number)
+  def initialize(number, type)
     @number = number
     @wagons = []
     @speed = 0
+    @type = type
     @@trains[number] = self
     register_instance
     validate!
@@ -49,7 +50,7 @@ class Train
   end
 
   def attach_wagon(wagon)
-    @wagons << wagon if @speed.zero? && wagon.type == type
+    @wagons << wagon if @speed.zero? && wagon.type == @type
   end
 
   def detach_wagon

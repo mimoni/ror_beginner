@@ -101,7 +101,9 @@ class Main
   def user_input(message = '', type = String)
     print "#{message}: "
     input = gets.chomp
+
     return nil if input == 'exit'
+
     if type == Integer
       input.to_i
     elsif type == Float
@@ -222,7 +224,7 @@ class Main
       break if train_index.nil?
       train = @trains[train_index]
       if train
-        wagon = get_wagon_by_type_train train
+        wagon = get_wagon_by_type_train(train)
         capacity = get_capacity(wagon)
         train.attach_wagon(wagon.new(capacity))
         puts "Вакон к поезду #{train.number} прицеплен"
@@ -345,7 +347,7 @@ class Main
     if wagon == CargoWagon
       user_input 'Введите общий объема вагона (от 50 до 300)', Float
     elsif wagon == PassengerWagon
-      user_input 'Введите общее кол-во мест (от 20 до 64)', Interrupt
+      user_input 'Введите общее кол-во мест (от 20 до 64)', Integer
     end
   end
 
@@ -363,11 +365,11 @@ class Main
 
     if wagon.instance_of?(CargoWagon)
       volume = user_input 'Введите объем', Float
-      wagon.load volume
+      wagon.take_space(volume)
     end
 
     if wagon.instance_of?(PassengerWagon)
-      wagon.take_place
+      wagon.take_space
       puts '1 Место в пасажирском вагоне занято'
     end
 
@@ -389,7 +391,7 @@ class Main
       end
 
       5.times do
-        wagon = get_wagon_by_type_train train
+        wagon = get_wagon_by_type_train(train)
         train.attach_wagon(wagon.new)
       end
       @trains << train
