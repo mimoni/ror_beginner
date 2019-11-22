@@ -1,3 +1,6 @@
+AllCops:
+  Exclude:
+    - '*/main.rb'
 Style/AsciiComments:
   Enabled: false
 Documentation:

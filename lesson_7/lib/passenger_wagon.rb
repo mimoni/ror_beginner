@@ -1,10 +1,13 @@
+# frozen_string_literal: true
+
 class PassengerWagon < Wagon
   def initialize(amount_seats = 20)
     super(:passenger, amount_seats)
   end
 
   def to_s
-    "номер вагона:#{@name} тип: пассажирский, свободных мест: #{available_space} занятых мест: #{@taken_space}"
+    %(номер вагона:#{@name} тип: пассажирский,
+      свободных мест: #{available_space} занятых мест: #{@taken_space})
   end
 
   protected

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Класс Train (Поезд):
 # - Имеет номер (произвольная строка) и тип (грузовой, пассажирский) и
 #   количество вагонов, эти данные указываются при создании экземпляра класса
@@ -20,8 +22,8 @@ class Train
   include InstanceCounter
   attr_reader :speed, :wagons, :number, :type
 
-  NUMBER_FORMAT = /^[0-9a-z]{3}-?[0-9a-z]{2}$/i
-  @@trains = {}
+  NUMBER_FORMAT = /^[0-9a-z]{3}-?[0-9a-z]{2}$/i.freeze
+  @@trains = {} # rubocop:disable Style/ClassVars
 
   def self.find(number)
     @@trains[number]
@@ -35,10 +37,6 @@ class Train
     @@trains[number] = self
     register_instance
     validate!
-  end
-
-  def type
-    self.class
   end
 
   def increase_speed(speed = 10)
@@ -56,6 +54,7 @@ class Train
   def detach_wagon
     raise 'Нельзя отцеплять вагоны на ходу' unless @speed.zero?
     raise 'Вагонов уже нет' unless @wagons.any?
+
     @wagons.pop
   end
 
@@ -100,7 +99,7 @@ class Train
   protected
 
   def get_station_by_index(index)
-    return nil if index < 0
+    return nil if index.negative?
 
     @route.stations[index]
   end

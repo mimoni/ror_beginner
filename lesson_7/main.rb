@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'lib/dependencies'
 
 class Main
@@ -16,6 +18,7 @@ class Main
       begin
         action = user_input
         break if action.nil?
+
         execute_action action
       rescue StandardError => e
         puts_error e
@@ -129,6 +132,7 @@ class Main
     loop do
       station_name = user_input 'Введите имя станции'
       break if station_name.nil?
+
       @stations << Station.new(station_name)
       puts "Станция с именем #{station_name} создана\n"
     end
@@ -140,6 +144,7 @@ class Main
       puts 'Содание поездов:'
       train_type = get_type_train
       break if train_type.nil?
+
       train_number = user_input 'Введите номер поезда'
       make_train(train_type, train_number)
       press_to_continue
@@ -183,9 +188,9 @@ class Main
         break if route_action.nil?
 
         case route_action
-        when 1 then
+        when 1
           add_station_to_route route
-        when 2 then
+        when 2
           delete_station_from_route route
         end
       elsif action == 10
@@ -222,6 +227,7 @@ class Main
       show_trains
       train_index = user_input 'Выберите поезд', Integer
       break if train_index.nil?
+
       train = @trains[train_index]
       if train
         wagon = get_wagon_by_type_train(train)
@@ -241,6 +247,7 @@ class Main
       show_trains
       train_index = user_input 'Выберите поезд', Integer
       break if train_index.nil?
+
       train = @trains[train_index]
       if train
         detach_wagon train
@@ -263,6 +270,7 @@ class Main
     show_trains
     number_train = user_input 'Выберите поезд', Integer
     return if number_train.nil?
+
     train = @trains[number_train]
     if train
       loop do
@@ -299,6 +307,7 @@ class Main
     puts 'Веберите станцию чтобы спомотреть список поездов'
     station_index = user_input 'Станция', Integer
     return if station_index.nil?
+
     station = @stations[station_index]
     if station
       clear
@@ -325,6 +334,7 @@ class Main
     route.show_stations
     station_index = user_input 'Введите индекс станции', Integer
     return if station_index.nil?
+
     if route.delete_station(route.stations[station_index])
       puts 'Станция успешно удалена из маршрута'
     else
@@ -357,6 +367,7 @@ class Main
     train_number = user_input 'Веберите поезд', Integer
     train = @trains[train_number]
     raise 'Неправельно указан номер поезда' unless train
+
     show_wagons train
     wagon_index = user_input 'Выберите вагон', Integer
     wagon = train.wagons[wagon_index]
