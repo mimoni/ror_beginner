@@ -43,8 +43,7 @@ class Main
     puts '[6] - Отцепить вагоны от поезда'
     puts '[7] - Перемещать поезд по маршруту вперед и назад'
     puts '[8] - Посмотреть список станций и список поездов на станции'
-    puts '[9] - Заполнить место или объем в вагоне'
-    puts "\nexit для выхода\n"
+    puts "[9] - Заполнить место или объем в вагоне\nexit для выхода\n"
   end
 
   def execute_action(action)
@@ -68,7 +67,7 @@ class Main
     end
   end
 
-  def show_trains
+  def show_trains()
     puts 'Список поездов:'
     @trains.each_with_index do |train, index|
       puts "[#{index}] номер поезда:#{train.number} кол-во вагонов:#{train.wagons.size}"
@@ -203,7 +202,6 @@ class Main
   end
 
   def assign_route
-    clear
     puts 'Назначать маршрут поезду:'
     show_trains
     number_train = user_input 'Выберите поезд', Integer
@@ -329,8 +327,7 @@ class Main
   end
 
   def delete_station_from_route(route)
-    puts 'Удаление станций из маршрута:'
-    puts 'Список станций:'
+    puts "Удаление станций из маршрута: \nСписок станций:\n"
     route.show_stations
     station_index = user_input 'Введите индекс станции', Integer
     return if station_index.nil?
