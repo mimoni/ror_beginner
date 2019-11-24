@@ -67,7 +67,7 @@ class Main
     end
   end
 
-  def show_trains()
+  def show_trains
     puts 'Список поездов:'
     @trains.each_with_index do |train, index|
       puts "[#{index}] номер поезда:#{train.number} кол-во вагонов:#{train.wagons.size}"
@@ -85,9 +85,11 @@ class Main
     @routes.each_with_index do |route, index|
       puts "[#{index}] - #{route} кол-во станций:#{route.stations.size}"
     end
+    puts 'exit - для выхода'
+    puts 'Введите имя маршрута для его изменения или 10 - для создания нового маршрута,'
   end
 
-  def get_type_train
+  def receive_type_train
     puts 'Типы поездов:'
     puts '[1] - Пассажирский поезд'
     puts '[2] - Грузовой поезд'
@@ -121,8 +123,8 @@ class Main
     wagon
   end
 
-  def puts_error(e)
-    puts "\nОшибка: #{e.message}"
+  def puts_error(error)
+    puts "\nОшибка: #{error.message}"
   end
 
   def create_station
@@ -141,7 +143,7 @@ class Main
     loop do
       clear
       puts 'Содание поездов:'
-      train_type = get_type_train
+      train_type = receive_type_train
       break if train_type.nil?
 
       train_number = user_input 'Введите номер поезда'
@@ -164,6 +166,13 @@ class Main
     train_klass.new(number)
   end
 
+  def show_route_menu(route)
+    puts "Выбран маршрут: #{route}"
+    puts '[1] - для добавлении станции в маршрут'
+    puts '[2] - для удаления станции из маршрута'
+    puts 'exit - для выхода'
+  end
+
   def manage_route
     clear
     puts 'Создание маршрутов и управление станциями в нем'
@@ -172,17 +181,12 @@ class Main
 
     loop do
       show_routes
-      puts 'exit - для выхода'
-      puts 'Введите имя маршрута для его изменения или 10 - для создания нового маршрута,'
       action = user_input '', Integer
       break if action.nil?
 
       route = @routes[action]
       if route
-        puts "Выбран маршрут: #{route}"
-        puts '[1] - для добавлении станции в маршрут'
-        puts '[2] - для удаления станции из маршрута'
-        puts 'exit - для выхода'
+        show_route_menu(route)
         route_action = user_input '', Integer
         break if route_action.nil?
 
@@ -262,6 +266,13 @@ class Main
     puts_error e
   end
 
+  def show_choice_menu_train(train)
+    puts "Поезд #{train.number} находится на станции #{train.current_station}"
+    puts "[n] - на следующую станцию #{train.next_station}" if train.next_station
+    puts "[p] - на предыдущую станцию #{train.previous_station}" if train.previous_station
+    puts 'exit - для выхода'
+  end
+
   def move_train
     clear
     puts 'Перемещать поезд по маршруту вперед и назад'
@@ -272,10 +283,7 @@ class Main
     train = @trains[number_train]
     if train
       loop do
-        puts "Поезд #{train.number} находится на станции #{train.current_station}"
-        puts "[n] - на следующую станцию #{train.next_station}" if train.next_station
-        puts "[p] - на предыдущую станцию #{train.previous_station}" if train.previous_station
-        puts 'exit - для выхода'
+        show_choice_menu_train(train)
         action = user_input
         break if action.nil?
 
@@ -390,18 +398,16 @@ class Main
       name = i.to_s
       @stations << Station.new(name.rjust(3, '0'))
 
-      if i.even?
-        name = name.rjust(6, 'PAS-00')
-        train = build_train(1, name)
-      else
-        name = name.rjust(6, 'CAR-00')
-        train = build_train(2, name)
-      end
+      train = if i.even?
+                build_train(1, name.rjust(6, 'PAS-00'))
+              else
+                build_train(2, name.rjust(6, 'CAR-00'))
+              end
 
       5.times do
-        wagon = get_wagon_by_type_train(train)
-        train.attach_wagon(wagon.new)
+        train.attach_wagon(get_wagon_by_type_train(train).new)
       end
+
       @trains << train
     end
 
